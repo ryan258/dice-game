@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Die from './Die'
+import './RollDices.css'
 
 export default class RollDices extends Component {
   // use default props for an array of options that are never going to change - then this could be overridden to change amount of sides by passing in a new array of options
@@ -11,7 +12,8 @@ export default class RollDices extends Component {
     super(props)
     this.state = {
       die1: 'one',
-      die2: 'two'
+      die2: 'two',
+      isRolling: false
     }
     this.roll = this.roll.bind(this)
   }
@@ -23,16 +25,26 @@ export default class RollDices extends Component {
     // setState w/ new rolls
     this.setState({
       die1: newDie1,
-      die2: newDie2
+      die2: newDie2,
+      isRolling: true
     })
+    setTimeout(() => {
+      this.setState({
+        isRolling: false
+      })
+    }, 1000)
   }
   render() {
     return (
-      <div>
-        <Die face={this.state.die1} />
-        <Die face={this.state.die2} />
+      <div className="RollDices">
+        <div className="RollDices-container">
+          <Die face={this.state.die1} shaking={this.state.isRolling} />
+          <Die face={this.state.die2} shaking={this.state.isRolling} />
+        </div>
 
-        <button onClick={this.roll}>Roll Dice</button>
+        <button onClick={this.roll} disabled={this.state.isRolling}>
+          {this.state.isRolling ? 'Is rolling...' : 'Roll Dice!'}
+        </button>
       </div>
     )
   }
